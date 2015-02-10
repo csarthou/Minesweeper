@@ -80,11 +80,33 @@ public class BoardGame implements BoardGameInterface {
             System.out.println("Vous êtes tombé sur une mine!");
         }
 
+        Integer quitOrRestart = askQuitOrRestart();
+        while (quitOrRestart == null) {
+            quitOrRestart = askQuitOrRestart();
+        }
+        if (quitOrRestart.equals(0)) {
+            //todo: quit the game
+        } else if (quitOrRestart.equals(1)) {
+            startGame();
+        }
+
     }
 
     private void showBoard() {
 
-        String linesSeparator = "-";
+        String xHeader = "   \\";
+        for (int x=1; x<=maxCaseCoordinates.getX(); x++) {
+            if (x<10) {
+                xHeader += " "+x+" \\";
+            } else if (x<100) {
+                xHeader += " "+x+"\\";
+            } else if (x<1000) {
+                xHeader += x+"\\";
+            }
+        }
+        System.out.println(xHeader);
+
+        String linesSeparator = "    -";
 
         for (int x=1; x<=maxCaseCoordinates.getX(); x++) {
             linesSeparator += "----";
@@ -93,7 +115,17 @@ public class BoardGame implements BoardGameInterface {
 
         for (int y=1; y<=maxCaseCoordinates.getY(); y++) {
 
-            System.out.print("|");
+            String yHeader = "";
+            if (y<10) {
+                yHeader += y+"   ";
+            } else if (y<100) {
+                yHeader += y+"  ";
+            } else if (y<1000) {
+                yHeader += y+" ";
+            }
+
+            System.out.print(yHeader+"|");
+
             for (int x=1; x<=maxCaseCoordinates.getX(); x++) {
 
                 Case tempCase = boardCasesManager.getCase(new CaseCoordinates(x,y));
@@ -252,6 +284,32 @@ public class BoardGame implements BoardGameInterface {
         }
 
         return returnedInt;
+    }
+
+    private Integer askQuitOrRestart() {
+
+        Integer returnedInteger = null;
+
+        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("Vous pouvez Quitter(Q) ou Redémarrer(R) une partie  :");
+
+        try {
+
+            String numberOfMinesEnteredByKeyboard=keyboard.readLine();
+            if (numberOfMinesEnteredByKeyboard != null) {
+                if(numberOfMinesEnteredByKeyboard.equals("Q")) {
+                    returnedInteger = 0;
+                } else if (numberOfMinesEnteredByKeyboard.equals("R")) {
+                    returnedInteger = 1;
+                }
+            }
+
+        } catch(IOException e) {
+            System.out.println("IOException :"+e);
+        }
+
+        return returnedInteger;
     }
 
     private boolean isEndOfGame() {
