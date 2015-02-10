@@ -145,7 +145,7 @@ public class BoardGame implements BoardGameInterface {
                     caseToUncover.setUncovered(true);
 
                     if (numberOfAdjacentMines == 0) {
-                        System.out.println("numberOfAdjacentMines == 0 ");
+                        //System.out.println("numberOfAdjacentMines == 0 ");
                         Iterator<Case> it2 = adjacentCases.iterator();
                         while(it2.hasNext()) {
                             uncoverCase(it2.next());
